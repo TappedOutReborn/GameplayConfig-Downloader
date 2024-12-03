@@ -1,0 +1,1186 @@
+package Data;
+
+// ///////////////////////////////////////////////////////////////////////////// //
+
+message ErrorMessage {
+
+ enum Code {
+  UNKNOWN_CODE = 1;
+  UNAUTHORIZED = 401;
+  NOT_FOUND = 404;
+  CONFLICT = 409;
+  INTERNAL_SERVER_ERROR = 500;
+  NOT_IMPLEMENTED = 501;
+  SERVICE_UNAVAILABLE = 503;
+  HTTP_VERSION_NOT_SUPPORTED = 505;
+  BAD_REQUEST = 400;
+ }
+
+ enum Type {
+  UNKNOWN_ERROR = 1;
+  AUTHENTICATION_ERROR = 2;
+  NO_SUCH_METHOD = 3;
+  NO_SUCH_RESOURCE = 4;
+  MISSING_VALUE = 5;
+  INVALID_VALUE = 6;
+  VALUE_TOO_SMALL = 7;
+  VALUE_TOO_LARGE = 8;
+  RESOURCE_ALREADY_EXISTS = 9;
+  METHOD_CALLED_TOO_OFTEN = 23;
+  INVALID_PARAMETERS_FORMAT = 24;
+  LOCK_REQUEST_FAILED_DUE_TO_TIMEOUT = 26;
+  PROTOCOL_MISMATCH = 28;
+  DATABASE_ERROR = 29;
+  SERVICE_UNAVAILABLE_TYPE = 30;
+  NOT_IMPLEMENTED_TYPE = 31;
+  SERVER_ERROR = 32;
+  SHARD_UNDER_MAINTENANCE = 34;
+  PLUGIN_INACTIVE = 35;
+ }
+
+ enum Severity {
+  LEVEL_DEBUG = 0;
+  LEVEL_INFO = 1;
+  LEVEL_WARN = 2;
+  LEVEL_ERROR = 3;
+  LEVEL_FATAL = 4;
+ }
+ optional Code code = 1;
+ optional Type type = 2;
+ optional string field = 3;
+ optional Severity severity = 4;
+ optional string message = 5;
+}
+
+message NameValue {
+ optional string name = 1;
+ optional string value = 2;
+}
+
+message GameplayConfigResponse {
+ repeated NameValue item = 1;
+ optional ErrorMessage error = 2;
+}
+
+// ///////////////////////////////////////////////////////////////////////////// //
+
+message ClientConfigResponse {
+ message ClientConfigItem {
+  optional int32 clientConfigId = 1;
+  optional string name = 2;
+  optional string value = 3;
+ }
+
+ repeated ClientConfigItem items = 2;
+}
+
+// ///////////////////////////////////////////////////////////////////////////// //
+
+message CurrencyData {
+ optional string id = 1;
+ optional int32 vcTotalPurchased = 2;
+ optional int32 vcTotalAwarded = 3;
+ optional int32 vcBalance = 4;
+ optional int64 createdAt = 5;
+ optional int64 updatedAt = 6;
+}
+
+// ///////////////////////////////////////////////////////////////////////////// //
+
+message UserIndirectData {
+ optional string userId = 1;
+ optional string telemetryId = 2;
+}
+
+message AnonymousUserData {
+ optional bool isAnonymous = 1;
+}
+
+message TokenData {
+ optional string sessionKey = 1;
+ optional int64 expirationDate = 2;
+}
+
+message UsersResponseMessage {
+ optional UserIndirectData user = 1;
+ optional TokenData token = 2;
+}
+
+// ///////////////////////////////////////////////////////////////////////////// //
+
+message WholeLandTokenRequest {
+ optional string requestId = 1;
+}
+
+message WholeLandTokenResponse {
+ optional string token = 1;
+ optional bool conflict = 2;
+}
+
+message DeleteTokenRequest {
+ optional string token = 1;
+}
+
+message DeleteTokenResponse {
+ optional bool result = 1;
+}
+
+// ///////////////////////////////////////////////////////////////////////////// //
+
+message SpendableElement {
+ optional uint32 type = 1;
+ optional uint32 amount = 2;
+}
+
+message OwnerList {
+ optional string id = 1;
+ repeated string userName = 2;
+}
+
+message SublandInfo {
+  optional int32 sublandId = 1;
+  optional int32 rating = 2;
+  optional bool created = 3 [default = false];
+}
+
+message SharedVariableSet {
+ message SharedVariable {
+  optional uint32 owner = 1;
+  optional int32 id = 2;
+  optional int32 value = 3;
+ }
+ repeated SharedVariable variable = 1;
+}
+
+message FriendData {
+  optional int32 dataVersion = 1;
+  optional bool hasLemonTree = 2;
+  optional int32 language = 3;
+  optional int32 level = 4;
+  optional string name = 5;
+  optional int32 rating = 6;
+  repeated SpendableElement spendable = 7;
+  optional int32 landVersion = 8;
+  repeated SublandInfo sublandInfos = 9;
+  optional int32 boardwalkTileCount = 10;
+  optional int64 lastPlayedTime = 11;
+  optional SharedVariableSet sharedVariableSet = 12;
+}
+
+message PowerupMessage {
+ message PowerupData {
+  optional uint32 entityID = 1;
+  optional uint32 powerupTypeID = 2;
+  optional int64 timeBeganMS = 3;
+  optional int32 stateEnum = 4;
+  optional int64 timePausedMS = 5;
+ }
+
+ repeated PowerupData powerupData = 1;
+}
+
+message LandMessage {
+ message EntityHeader {
+  optional uint32 id = 1;
+ }
+
+ message UserData {
+  message SavedRating {
+   optional uint32 savedRatingElemID = 1;
+   optional int32 savedRatingElem = 2;
+  }
+
+  optional EntityHeader header = 1;
+  optional uint64 lastBonusCollection = 2;
+  optional uint32 level = 3;
+  optional uint32 experience = 4;
+  optional uint32 money = 5;
+  repeated SavedRating savedRating = 6;
+  optional uint32 lastBonus = 7;
+  optional bool friendsUnlocked = 8;
+  optional bool memorabiliaUnlocked = 9;
+  optional bool reorganizeUnlocked = 10;
+  optional bool firstPurchase = 11;
+  optional bool sidebarDefaultOpen = 12;
+  optional bool showLevelUp = 13;
+  optional uint32 bonusExperience = 14;
+  optional uint32 bonusLevel = 15;
+  optional bool hasPrestigeData = 16;
+  optional uint32 prestigeID = 17;
+  optional bool prestigeShownFirst = 18;
+  optional bool prestigeShownSecond = 19;
+  optional bool prestigeShownThird = 20;
+  optional uint32 prestigeSelected = 21;
+  optional uint32 prestigeConsumbableID = 22;
+  optional bool tutorialComplete = 23;
+  optional uint32 pendingConsumable = 24;
+  optional uint32 visualLevel = 25;
+  optional int32 timezoneOffset = 26;
+  optional uint32 userPreferences = 27;
+  optional bool shouldAnalyze = 28;
+  optional int32 gambleOutcomeID = 29;
+  optional string gambleItemType = 30;
+  optional bool fullDLCCompleted = 31;
+  optional PowerupMessage powerupDataList = 32;
+ }
+
+ message InnerLandData {
+  optional EntityHeader header = 1;
+  optional string landBlocks = 2;
+  optional uint32 nextInstanceID = 3;
+  optional uint32 numChars = 4;
+  optional uint32 numBuildings = 5;
+  optional uint32 numConsumables = 6;
+  optional uint32 numJobs = 7;
+  optional uint32 numQuests = 8;
+  optional uint32 numNotices = 9;
+  optional uint32 numInventoryItems = 10;
+  optional uint32 numMemorabiliaItems = 11;
+  optional uint32 numEventCountLists = 12;
+  optional uint32 numPremiumUnlocks = 13;
+  optional uint32 numActionLimits = 14;
+  optional uint32 numRunsSincePromotion = 15;
+  optional uint32 levelOfRateAsk = 16;
+  optional int64 updateTime = 17;
+  optional int64 timeSpentPlaying = 18;
+  optional int64 lastLevelUpSpentTime = 19;
+  optional int64 lastLevelUpTimeStamp = 20;
+  optional bool initialSaveDone = 21;
+  optional int64 lastVandalismFeedPosted = 22;
+  optional int64 lastStealBuildingFeedPosted = 23;
+  optional int64 lastSideshowBobSpawned = 24;
+  optional uint32 nextCurrencyID = 25;
+  optional uint32 numQuestGroups = 26;
+  optional int32 scratcherRewardIndex = 27;
+  optional uint32 scratcherRewardConsumableID = 28;
+  optional uint64 creationTime = 29;
+  repeated string versions = 30;
+  optional bool buildingsSorted = 31;
+  optional uint32 numSavedFriends = 32;
+  optional uint32 landBlockWidth = 33;
+  optional uint32 landBlockHeight = 34;
+  optional int32 landBlockPositionX = 35;
+  optional int32 landBlockPositionY = 36;
+ }
+
+ message TerrainData {
+  optional EntityHeader header = 1;
+  optional uint32 mapDataSize = 2;
+  optional string mapData = 3;
+ }
+
+ message BuildingData {
+  optional EntityHeader header = 1;
+  optional uint32 building = 2;
+  optional int64 creationTime = 3;
+  optional int64 updateTime = 4;
+  optional float positionX = 5;
+  optional float positionY = 6;
+  optional bool flipped = 7;
+  optional int32 buildState = 8;
+  optional bool hurry = 9;
+  optional uint32 cropState = 10;
+  optional bool betActive = 11;
+  optional int64 betStartTime = 12;
+  optional uint32 betChoice = 13;
+  optional bool winningBet = 14;
+  optional bool vandalized = 15;
+  optional int32 namelen = 16;
+  optional string vandalName = 17;
+  optional bool isOwnerList = 18;
+  optional OwnerList ownerList = 19;
+  optional int32 skin = 20;
+  optional bool grantRewards = 21;
+  optional uint32 flipState = 22;
+  optional uint32 subLandID = 23;
+  optional int64 timeOfVandalism = 24;
+  optional uint32 flags = 25;
+}
+
+ message CharacterData {
+  optional EntityHeader header = 1;
+  optional uint32 character = 2;
+  optional int64 updateTime = 3;
+  optional float positionX = 4;
+  optional float positionY = 5;
+  optional int32 skin = 6;
+  optional int32 skinBackup = 7;
+  optional uint32 subLandID = 8;
+  optional uint32 flags = 9;
+ }
+
+ message ConsumableData {
+  optional EntityHeader header = 1;
+  optional uint32 consumable = 2;
+  optional int64 consumedTime = 3;
+ }
+
+ message JobData {
+  optional EntityHeader header = 1;
+  optional uint32 job = 2;
+  optional uint32 charRef = 3;
+  optional uint32 buildingRef = 4;
+  optional int64 updateTime = 5;
+  optional int32 state = 6;
+  optional bool hurry = 7;
+  optional bool hasBuilding = 8;
+  optional bool hasChar = 9;
+  optional uint32 moveToCharRef = 10;
+  optional bool proxyCheckFired = 11;
+  optional int32 gridPositionX = 12;
+  optional int32 gridPositionY = 13;
+  optional bool hasGrid = 14;
+  optional uint32 subLandID = 15;
+  optional uint32 subBuildingRef = 16;
+ }
+
+ message QuestData {
+  message ObjectiveData {
+   message BuildingCustomData {
+    optional int32 qty = 1;
+   }
+
+   message ResourcesCustomData {
+    optional uint32 money = 1;
+    optional uint32 premium = 2;
+   }
+
+   message ItemCountCustomData {
+    optional int32 count = 1;
+   }
+
+   message VisitFriendCustomData {
+    optional int32 num = 1;
+    optional bool fakeIncluded = 2;
+    repeated string friend = 3;
+   }
+
+   message DynamicData {
+    optional int32 value = 1;
+   }
+
+   optional int32 objectiveID = 1;
+   optional int32 objectiveState = 2;
+   optional int32 objectiveType = 3;
+   optional int32 version = 4;
+   optional bool questLastRetVal = 5;
+   optional bool questLocal = 6;
+   optional bool rushed = 7;
+   optional bool keepDone = 8;
+   optional bool blockDoneScript = 9;
+   optional BuildingCustomData buildingCustomData = 10;
+   optional ResourcesCustomData resourcesCustomData = 11;
+   optional ItemCountCustomData itemCountCustomData = 12;
+   optional VisitFriendCustomData visitFriendCustomData = 13;
+   optional DynamicData dynamicData = 14;
+  }
+
+  optional EntityHeader header = 1;
+  optional uint32 questID = 2;
+  optional int32 questState = 3;
+  optional int32 questScriptState = 4;
+  optional int32 numObjectives = 5;
+  repeated ObjectiveData objectiveData = 6;
+  optional int32 timesCompleted = 7;
+ }
+
+ message NotificationData {
+  message ConsumableCallback {
+   optional uint32 consumableID = 1;
+   optional int32 sourceLength = 2;
+   optional string source = 3;
+   optional uint32 consumableCount = 4;
+  }
+
+  message MemorabiliaRewardCallback {
+   optional uint32 memorabiliaID = 1;
+  }
+
+  message NotificationCallback {
+   optional uint32 money = 1;
+   optional uint32 premiumCurrency = 2;
+   optional uint32 exp = 3;
+   optional int32 sourceLength = 4;
+   optional string source = 5;
+   optional int32 reasonLength = 6;
+   optional string reason = 7;
+   optional int32 spendablesLen = 8;
+   optional string spendables = 9;
+  }
+
+  message GainCharacterRewardCallback {
+   optional uint32 buildingID = 1;
+   optional uint32 characterID = 2;
+   optional uint32 characterCount = 3;
+   optional int32 sourceLength = 4;
+   optional string source = 5;
+  }
+
+  message GainPrizeRewardCallback {
+   optional uint32 specialEventID = 1;
+   optional uint32 prizeListIndex = 2;
+  }
+
+  message MultiRewardCallback {
+   optional uint32 money = 1;
+   optional uint32 premiumCurrency = 2;
+   optional uint32 exp = 3;
+   optional int32 sourceLength = 4;
+   optional string source = 5;
+   optional int32 reasonLength = 6;
+   optional string reason = 7;
+   optional uint32 buildingID = 8;
+   optional uint32 characterID = 9;
+   optional float positionX = 10;
+   optional float positionY = 11;
+   optional float positionZ = 12;
+   optional int32 spendablesLen = 13;
+   optional string spendables = 14;
+   optional uint32 consumableID = 15;
+   optional uint32 consumableCount = 16;
+   optional int32 floatTextLength = 17;
+   optional string floatText = 18;
+  }
+
+  message ResourceAndItemRewardCallback {
+   optional uint32 money = 1;
+   optional uint32 premiumCurrency = 2;
+   optional uint32 exp = 3;
+   optional int32 sourceLength = 4;
+   optional string source = 5;
+   optional int32 reasonLength = 6;
+   optional string reason = 7;
+   optional uint32 buildingID = 8;
+   optional uint32 characterID = 9;
+   optional int32 spendablesLen = 10;
+   optional string spendables = 11;
+   optional uint32 rewardBuildingID = 12;
+   optional uint32 rewardConsumableID = 13;
+   optional int32 floatTextLength = 14;
+   optional string floatText = 15;
+   optional int32 flags = 16;
+  }
+
+  optional EntityHeader header = 1;
+  optional uint32 buildingID = 2;
+  optional uint32 characterID = 3;
+  optional uint32 type = 4;
+  optional uint32 callbackID = 5;
+  optional float startX = 6;
+  optional float startY = 7;
+  optional float startZ = 8;
+  optional float endX = 9;
+  optional float endY = 10;
+  optional float endZ = 11;
+  optional int64 moveTime = 12;
+  optional bool isStatic = 13;
+  optional bool isSetup = 14;
+  optional bool hasBuilding = 15;
+  optional bool hasChar = 16;
+  optional uint32 historyType = 17;
+  optional uint32 historyJobID = 18;
+  optional uint32 historyBuildingID = 19;
+  optional uint32 historyCharacterID = 20;
+  optional uint32 historyQuestID = 21;
+  optional uint32 historyBuildingInstanceID = 22;
+  optional ConsumableCallback consumableCallback = 23;
+  optional MemorabiliaRewardCallback memorabiliaRewardCallback = 24;
+  optional NotificationCallback notificationCallback = 25;
+  optional GainCharacterRewardCallback gainCharacterRewardCallback = 26;
+  optional GainPrizeRewardCallback gainPrizeRewardCallback = 27;
+  optional MultiRewardCallback multiRewardCallback = 28;
+  optional ResourceAndItemRewardCallback resourceAndItemRewardCallback = 29;
+  optional uint32 subLandID = 30;
+  optional uint32 historyCharacterInstanceID = 31;
+ }
+
+ message InventoryItemData {
+  optional EntityHeader header = 1;
+  optional int32 itemType = 2;
+  optional int32 itemID = 3;
+  optional int32 count = 4;
+  optional bool isOwnerList = 5;
+  optional OwnerList ownerList = 6;
+  optional int32 fromLand = 7;
+  optional int32 sourceLen = 8;
+  optional string source = 9;
+ }
+
+ message MemorabiliaItemData {
+  optional EntityHeader header = 1;
+  optional uint32 itemID = 2;
+  optional uint32 count = 3;
+ }
+
+ message PremiumUnlockItemData {
+  optional EntityHeader header = 1;
+  optional uint32 itemID = 2;
+  optional int32 itemType = 3;
+ }
+
+ message EventCountListData {
+  message Event {
+   optional int32 count = 1;
+   optional int32 type = 2;
+   optional int32 jobID = 3;
+   optional int32 charID = 4;
+   optional int32 buildID = 5;
+   optional int32 consumeID = 6;
+   optional int32 buildingID = 7;
+   optional int32 friendLand = 8;
+   optional int32 characterID = 9;
+   optional int32 arg1 = 10;
+   optional int64 updatedAt = 11;
+  }
+
+  optional EntityHeader header = 1;
+  optional int32 numElements = 2;
+  repeated Event event = 3;
+ }
+
+ message ActionLimitData {
+  optional EntityHeader header = 1;
+  optional string name = 2;
+  optional int64 time = 3;
+  optional int32 count = 4;
+  optional int32 special = 5;
+  optional bool fakeFriend = 6;
+ }
+
+ message SidebarData {
+  message SidebarElement {
+   optional int32 type = 1;
+   optional int32 identifier = 2;
+   optional int32 state = 3;
+   optional int64 updateTime = 4;
+  }
+
+  optional EntityHeader header = 1;
+  optional int32 numSidebarElements = 2;
+  repeated SidebarElement sidebarElement = 3;
+ }
+
+ message CharacterSetsData {
+  message CharacterSet {
+   optional int32 length = 1;
+   optional string name = 2;
+  }
+
+  optional EntityHeader header = 1;
+  optional int32 numCompleteSets = 2;
+  repeated CharacterSet characterSet = 3;
+ }
+
+ message PushNotificationsData {
+  optional EntityHeader header = 1;
+  optional int32 type = 2;
+  optional int32 pushIDLength = 3;
+  optional string pushID = 4;
+  optional bool hasSource = 5;
+  optional uint32 source = 6;
+ }
+
+ message TimedScriptData {
+  optional EntityHeader header = 1;
+  optional int64 creationTime = 2;
+  optional int32 waitTime = 3;
+  optional int32 scriptnamelen = 4;
+  optional int32 scriptpackagelen = 5;
+  optional string scriptname = 6;
+  optional string scriptpackage = 7;
+  optional int32 scriptobjnamelen = 8;
+  optional string scriptobjname = 9;
+  optional int32 entityID = 10;
+ }
+
+ message BonusUnlocksData {
+  message BonusEntry {
+   optional int32 id = 1;
+   optional bool value = 2;
+  }
+
+  optional EntityHeader header = 1;
+  optional int32 numEntries = 2;
+  repeated BonusEntry bonusEntry = 3;
+ }
+
+ message CharacterUnlocksData {
+  optional EntityHeader header = 1;
+  optional uint32 characterID = 2;
+ }
+
+ message SkinUnlocksData {
+  optional EntityHeader header = 1;
+  optional int32 skinUnlockLen = 2;
+  optional string skinUnlock = 3;
+  optional int32 skinReceivedLen = 4;
+  optional string skinReceived = 5;
+ }
+
+ message DelayedActionData {
+  message RewardData {
+   optional uint32 money = 1;
+   optional uint32 exp = 2;
+   optional uint32 premium = 3;
+  }
+
+  optional EntityHeader header = 1;
+  optional int32 type = 2;
+  optional int32 sourceLen = 3;
+  optional string source = 4;
+  optional int32 reasonLen = 5;
+  optional string reason = 6;
+  optional RewardData rewardData = 7;
+ }
+
+ message SpendablesData {
+  optional EntityHeader header = 1;
+  repeated SpendableElement spendable = 2;
+ }
+
+ message TimedCharacterDataSet {
+  message TimedCharacterData {
+   optional EntityHeader header = 1;
+   optional uint32 timedCharacterInstanceIDLen = 2;
+   optional string timedCharacterInstanceID = 3;
+   optional uint32 characterID = 4;
+   optional uint32 subLandID = 5;
+   optional uint32 characterOwnerLen = 6;
+   optional string characterOwner = 7;
+   optional uint32 landOwnerLen = 8;
+   optional string landOwner = 9;
+   optional int64 timeCreated = 10;
+   optional int64 lifeSpan = 11;
+   optional uint32 flag = 12;
+  }
+
+  repeated TimedCharacterData timedCharacterData = 1;
+ }
+
+ message SpecialEventsData {
+  message SpecialEvent {
+   message SpecialEventPrizeDataSet {
+    message SpecialEventPrizeData {
+     optional EntityHeader header = 1;
+     optional uint32 prizeListID = 2;
+     optional uint32 nextPrize = 3;
+     optional float prizeChance = 4;
+     optional bool nextPrizeRushed = 5;
+     optional int64 nextResetTime = 6;
+    }
+
+    repeated SpecialEventPrizeData prizeData = 1;
+   }
+
+   message VariableSet {
+    message Variable {
+     optional string name = 1;
+     optional int32 value = 2;
+    }
+
+    repeated Variable variable = 1;
+   }
+
+   message BankDataSet {
+    message Deposit {
+     optional CurrencySaveData cost = 1;
+     optional uint32 depositedByIDLen = 2;
+     optional string depositedByID = 3;
+     optional int64 depositedAt = 4;
+     optional uint32 buildingRef = 5;
+    }
+
+    message DepositData {
+     repeated Deposit depositData = 1;
+    }
+
+    message BankData {
+     optional EntityHeader header = 1;
+     optional uint32 buildingRef = 2;
+     optional uint32 subLandID = 3;
+     optional uint32 bankID = 4;
+     optional DepositData deposits = 6;
+    }
+    repeated BankData bankData = 1;
+   }
+
+   message TimedAttackDataSet {
+    message TimedAttackData {
+     optional string instanceID = 1;
+     optional uint32 subLandID = 2;
+     optional uint32 objectServerID = 3;
+     optional uint32 objectClass = 4;
+     optional string objectOwner = 5;
+     optional string attackOwner = 6;
+     optional int64 timeCreated = 7;
+     optional int64 lifeSpan = 8;
+     optional uint32 flag = 9;
+     optional uint32 eventID = 10;
+     optional int32 numResUsed = 11;
+     optional uint32 objectID = 12;
+    }
+    repeated TimedAttackData timedAttackData = 1;
+   }
+
+   message TimeGateSet {
+    message TimeGate {
+     optional int32 gateId = 1;
+     optional int32 usesRemaining = 2;
+     optional int64 refillTime = 3;
+     optional string instanceId = 4;
+     optional int32 lastRefillCount = 5;
+    }
+    repeated TimeGate timegate = 1;
+   }
+
+   message GeneralBufferSets {
+    message BufferSet {
+     optional int32 id = 1;
+     repeated bytes buffers = 2;
+    }
+    repeated BufferSet bufferSet = 1;
+   }
+
+   optional uint32 id = 1;
+   optional int64 updateTime = 4;
+   optional VariableSet variables = 5;
+   optional SpecialEventPrizeDataSet prizeDataSet = 6;
+   optional TimedCharacterDataSet timedCharacterDataSet = 7;
+   optional BankDataSet bankDataSet = 8;
+   optional TimedAttackDataSet timedAttackDataSet = 9;
+   optional TimeGateSet timeGateSet = 10;
+   optional GeneralBufferSets generalBuffers = 11;
+  }
+
+  optional EntityHeader header = 1;
+  repeated SpecialEvent specialEvent = 2;
+ }
+
+ message FakeFriendData {
+  optional EntityHeader header = 1;
+  optional int32 townLevel = 2;
+  optional int32 buildingLen = 3;
+  optional string building = 4;
+  optional int32 actionTypeLen = 5;
+  optional string actionType = 6;
+  optional int64 actionTimeLen = 7;
+  optional string actionTime = 8;
+ }
+
+ message QuestGroupData {
+  optional EntityHeader header = 1;
+  optional uint32 questGroupID = 2;
+  optional int32 questGroupState = 3;
+  optional int32 currentChild = 4;
+  optional int32 lastChild = 5;
+  optional int32 numChildren = 6;
+  optional int32 childIDListLen = 7;
+  optional int32 weightListLen = 8;
+  optional string childIDList = 9;
+  optional string weightList = 10;
+  optional uint32 numCompleteDaily = 11;
+  optional int64 dailyCompletionTime = 12;
+ }
+
+ message ProcessedPurchaseData {
+  optional EntityHeader header = 1;
+  optional string idAndCountList = 2;
+  optional int32 idAndCountListLen = 3;
+ }
+
+ message CustomFriendActionData {
+  optional EntityHeader header = 1;
+  optional uint32 buildingInstance = 2;
+  optional string friendName = 3;
+  optional int32 friendNameLen = 4;
+  optional string actionType = 5;
+  optional int32 actionTypeLen = 6;
+  optional bool isBuilding = 7;
+ }
+
+ message GameObjectInfo {
+  message GameObject {
+   optional uint32 dataId = 1;
+   optional uint32 gameObjectType = 2;
+   optional int64 unlockTime = 3;
+   optional bool locked = 4;
+   optional bool viewed = 5;
+  }
+
+  optional EntityHeader header = 1;
+  repeated GameObject gameObject = 2;
+ }
+
+ message SubLandData {
+  optional EntityHeader header = 1;
+  optional uint32 subLandID = 2;
+  optional string landBlocks = 3;
+  repeated TerrainData terrainData = 4;
+  optional bool buildingsSorted = 5;
+  optional uint32 landBlockWidth = 6;
+  optional uint32 landBlockHeight = 7;
+  optional int32 landBlockPositionX = 8;
+  optional int32 landBlockPositionY = 9;
+ }
+
+ message MinigameData {
+  optional EntityHeader header = 1;
+  optional uint32 minigameID = 2;
+  optional uint32 buildingRefID = 3;
+  optional uint32 state = 4;
+  optional int64 updateTime = 5;
+  optional string prizeList = 6;
+  optional int32 prizeListLen = 7;
+  optional string tappedIndecies = 8;
+  optional int32 tappedIndeciesLen = 9;
+ }
+
+ message CollectionItemsData {
+  optional EntityHeader header = 1;
+  optional uint32 itemID = 2;
+  optional uint32 count = 3;
+  optional uint32 visualCount = 4;
+ }
+
+ message FriendListData {
+  optional EntityHeader header = 1;
+  optional string friendID = 2;
+  optional bool hideInMap = 3;
+  optional bool hasBeenVisited = 4;
+  optional bool isOrigin = 5;
+ }
+
+ message FriendActionCount {
+  optional EntityHeader header = 1;
+  optional int64 time = 2;
+  optional int32 count = 3;
+  optional int32 special = 4;
+ }
+
+ message PurchasedItemData {
+  optional string productId = 1;
+ }
+
+ message AdvancedVariableSet {
+  message AdvancedVariable {
+   optional string name = 1;
+   optional string value = 2;
+   optional int64 createdTime = 3;
+   optional int64 ttl = 4;
+   optional uint32 objectClass = 5;
+   optional uint32 serverID = 6;
+   optional uint32 objectTypeID = 7;
+   optional bool orphaned = 8;
+   optional bool canBeOrphaned = 9;
+   optional int32 scope = 10;
+   optional uint32 sublandID = 11;
+   optional uint32 flags = 12;
+   optional uint32 uuid = 13;
+  }
+  repeated AdvancedVariable variable = 1;
+ }
+
+ message ObjectVariables {
+  optional AdvancedVariableSet variables = 1;
+ }
+
+ message SavedRecommendations {
+  optional int32 reccomendationType = 1;
+  optional string entryName = 2;
+  optional int32 sublandID = 3;
+  optional int64 time = 4;
+  optional string characterName = 5;
+  optional int32 number = 6;
+  optional string extraName = 7;
+  optional float popularityTime = 8;
+ }
+
+ optional string id = 1;
+ optional FriendData friendData = 2;
+ optional UserData userData = 3;
+ optional InnerLandData innerLandData = 4;
+ optional TerrainData roadsData = 5;
+ optional TerrainData riversData = 6;
+ repeated BuildingData buildingData = 7;
+ repeated CharacterData characterData = 8;
+ repeated ConsumableData consumableData = 9;
+ repeated JobData jobData = 10;
+ repeated QuestData questData = 11;
+ repeated NotificationData notificationData = 12;
+ repeated InventoryItemData inventoryItemData = 13;
+ repeated MemorabiliaItemData memorabiliaItemData = 14;
+ repeated PremiumUnlockItemData premiumUnlockItemData = 15;
+ repeated EventCountListData eventCountListData = 16;
+ repeated ActionLimitData actionLimitData = 17;
+ optional SidebarData sidebarData = 18;
+ optional CharacterSetsData characterSetsData = 19;
+ repeated PushNotificationsData pushNotificationsData = 20;
+ repeated TimedScriptData timedScriptData = 21;
+ optional BonusUnlocksData bonusUnlocksData = 22;
+ repeated CharacterUnlocksData characterUnlocksData = 23;
+ optional SkinUnlocksData skinUnlocksData = 24;
+ repeated DelayedActionData delayedActionData = 25;
+ optional SpendablesData spendablesData = 26;
+ optional SpecialEventsData specialEventsData = 27;
+ optional FakeFriendData fakeFriendData = 28;
+ repeated QuestGroupData questGroupData = 29;
+ repeated PurchasedItemData purchases = 30;
+ optional ProcessedPurchaseData processedPurchaseData = 31;
+ repeated CustomFriendActionData customFriendActionData = 32;
+ optional bool debugLand = 33;
+ optional TerrainData oceanData = 34;
+ optional GameObjectInfo gameObjectInfo = 35;
+ repeated SubLandData subLandData = 36;
+ repeated MinigameData minigameData = 37;
+ repeated BuildingData stealableBuildingData = 38;
+ repeated CollectionItemsData collectionItemsData = 39;
+ repeated FriendListData friendListData = 40;
+ optional FriendActionCount allFriendActionsCount = 41;
+ optional bool friendListDataIsCreatedAndSaved = 42;
+ optional ObjectVariables objectVariables = 43;
+ repeated SavedRecommendations recommendations = 44;
+}
+
+// //////////////////////////////////////////////////////////////////////////////////////// //
+
+message CurrencyDelta {
+  optional int32 id = 1;
+  optional string reason = 2;
+  optional int32 amount = 3;
+  optional int64 updatedAt = 4;
+}
+
+message CurrencySaveData {
+ optional uint32 money = 1;
+ optional uint32 premium = 2;
+ optional uint32 realMoney = 3;
+ optional uint32 realPremium = 4;
+ optional uint32 numSpecial = 5;
+ repeated uint32 specialType = 6;
+ repeated uint32 specialAmount = 7;
+}
+
+message EventMessage {
+ message EventData {
+  message CharacterGainedData {
+   optional uint32 characterID = 1;
+  }
+
+  message CharacterLostData {
+   optional uint32 characterID = 1;
+  }
+
+  message StealBuildingEventData {
+   optional uint32 buildingInstanceID = 1;
+   optional uint32 buildingID = 2;
+   optional OwnerList ownerList = 3;
+  }
+
+  message GiftMemorabiliaData {
+   optional int32 setID = 1;
+   optional int32 itemID = 2;
+  }
+
+  message ShopCollectedData {
+   optional uint32 buildingInstanceID = 1;
+  }
+
+  message VandalismEventData {
+   optional uint32 buildingInstanceID = 1;
+   optional bool vandalized = 2;
+   optional int32 namelen = 3;
+   optional string vandalName = 4;
+  }
+
+  message SidebarUpdateData {
+   optional int32 type = 1;
+   optional int32 state = 2;
+   optional int32 identifier = 3;
+   optional int64 updateTime = 4;
+  }
+
+  message ReturnBuildingData {
+   optional uint32 buildingID = 1;
+   optional bool isOwnerList = 2;
+   optional OwnerList ownerList = 3;
+  }
+
+  message PlayScriptData {
+   optional bool playForFriend = 1;
+   optional int32 nameLen = 2;
+   optional string name = 3;
+   optional int32 packageLen = 4;
+   optional string package = 5;
+  }
+
+  message CustomFriendRequestData {
+   optional uint32 buildingID = 1;
+   optional int32 friendNameLen = 2;
+   optional string friendName = 3;
+   optional int32 actionTypeLen = 4;
+   optional string actionType = 5;
+   optional bool isBuilding = 6;
+  }
+
+  message PlayScriptAtPositionData {
+   optional bool playForFriend = 1;
+   optional int32 nameLen = 2;
+   optional string name = 3;
+   optional int32 packageLen = 4;
+   optional string package = 5;
+   optional int32 xPos = 6;
+   optional int32 yPos = 7;
+   optional int32 sublandId = 8;
+  }
+
+  message LoseResourcesRequestData {
+   optional CurrencySaveData resources = 1;
+   optional string source = 2;
+   optional string friendName = 3;
+  }
+
+  optional int32 buildingInstanceID = 1;
+  optional int64 requestTime = 2;
+  optional int32 requestType = 3;
+  optional CharacterGainedData characterGainedData = 4;
+  optional CharacterLostData characterLostData = 5;
+  optional StealBuildingEventData stealBuildingEventData = 6;
+  optional GiftMemorabiliaData giftMemorabiliaData = 7;
+  optional ShopCollectedData shopCollectedData = 8;
+  optional VandalismEventData vandalismEventData = 9;
+  optional SidebarUpdateData sidebarUpdateData = 10;
+  optional ReturnBuildingData returnBuildingData = 11;
+  optional PlayScriptData playScriptData = 12;
+  optional CustomFriendRequestData customFriendRequestData = 13;
+  optional PlayScriptAtPositionData playScriptAtPositionData = 14;
+  optional int32 displayNameLen = 15;
+  optional string displayName = 16;
+  optional int64 updatedAt = 17;
+  optional LoseResourcesRequestData loseResourcesRequestData = 18;
+ }
+
+ optional string id = 1;
+ optional string toPlayerId = 2;
+ optional string fromPlayerId = 3;
+ optional string eventType = 4;
+ optional int64 createdAt = 5;
+ optional int64 updatedAt = 10;
+ optional int64 inc = 6;
+ optional EventData eventData = 7;
+ optional string targetEntityId = 8;
+ optional bool uniqueEvent = 9;
+}
+
+message EventsMessage {
+ repeated EventMessage event = 1;
+}
+
+message ExtraLandMessage {
+
+ message PushNotification {
+  optional string id = 1;
+  optional string toPlayerId = 2;
+  optional int32 scheduledIn = 3;
+  optional string templateName = 4;
+  optional string message = 5;
+ }
+
+ message CommunityGoalDelta {
+  optional string category = 1;
+  optional int64 amount = 2;
+ }
+
+ message MatchmakingRegistration {
+  optional string category = 1;
+  repeated NameValue params = 2;
+ }
+
+ repeated CurrencyDelta currencyDelta = 1;
+ repeated EventMessage event = 2;
+ repeated PushNotification pushNotification = 3;
+ repeated CommunityGoalDelta communityGoalDelta = 4;
+ repeated MatchmakingRegistration matchmakingRegistration = 5;
+}
+
+message ExtraLandResponse {
+ message CommunityGoal {
+  optional string category = 1;
+  optional int64 progressTotal = 2;
+  optional double progressRate = 3;
+  repeated int64 awardThresholds = 4;
+ }
+
+ repeated CurrencyDelta processedCurrencyDelta = 1;
+ repeated EventMessage processedEvent = 2;
+ repeated EventMessage receivedEvent = 3;
+ repeated CommunityGoal communityGoal = 4;
+}
+
+// ///////////////////////////////////////////////////////////////////////////// //
+
+message GetFriendDataRequest {
+ repeated string friendId = 1;
+}
+
+message GetFriendDataResponse {
+ message FriendDataPair {
+  message FriendDataError {
+   optional int32 code = 1;
+   optional string type = 2;
+  }
+
+  enum AuthService {
+   NUCLEUS = 0;
+   FACEBOOK = 1;
+  }
+  optional string friendId = 1;
+  optional FriendData friendData = 2;
+  optional FriendDataError error = 3;
+  optional AuthService authService = 4;
+  optional string externalId = 5;
+ }
+
+ repeated FriendDataPair friendData = 1;
+}
+
+// //////////////////////////////////////////////////////////////////////////////////////// //
+
+message FriendInteractionParamSet {
+ message FriendInteractionParam {
+  optional string stringKey = 1;
+  optional string stringValue = 2;
+  optional int32 intKey = 3;
+  optional int32 intValue = 4;
+ }
+
+ repeated FriendInteractionParam params = 1;
+}
+
+message KinesisCurrencyDelta {
+ repeated CurrencyDelta currencyDelta = 1;
+ optional string userId = 2;
+ optional int64 time = 3;
+}
+
+message ProjectBoardParamSet {
+ message ProjectParam {
+  optional string name = 1;
+  optional int32 setID = 2;
+  optional CurrencySaveData cost = 3;
+  optional CurrencySaveData reward = 4;
+ }
+
+ optional int32 numCompleted = 1;
+ optional int64 startedTime = 2;
+ repeated ProjectParam params = 3;
+}
+
+message KinesisLandUpdateMessage {
+ optional LandMessage newLand = 1;
+ optional LandMessage oldLand = 2;
+ optional int64 updateTime = 3;
+ optional string clientVersion = 4;
+ optional string platform = 5;
+}
+
+// //////////////////////////////////////////////////////////////////////////////////////// //
